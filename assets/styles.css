@@ -1,0 +1,87 @@
+@charset "UTF-8";
+:root {
+  --paper: #f6f5f0;
+  --ink: #172b32;
+  --muted: #52666a;
+  --accent: #155b56;
+  --line: #bdc9c0;
+  --photo: #eeeee6;
+  --button: #fffdf7;
+  --hover: #e6e9e1;
+  --focus: #287cba;
+  --page-fade: 320ms;
+  --icon-fade: 240ms;
+  font-family: "Segoe UI", Arial, sans-serif;
+  color-scheme: light;
+  color: var(--ink);
+  background: var(--paper);
+}
+:root[data-theme="dark"] {
+  --paper: #151e22;
+  --ink: #e4ece8;
+  --muted: #acbdb7;
+  --accent: #9ed9c6;
+  --line: #4a5e58;
+  --photo: #202d30;
+  --button: #27373a;
+  --hover: #31453f;
+  --focus: #8cccf5;
+  color-scheme: dark;
+}
+* { box-sizing: border-box; }
+body { margin: 0; line-height: 1.5; color: var(--ink); background: var(--paper); }
+main { width: min(680px, calc(100% - 40px)); margin: 64px auto; }
+a { color: inherit; text-decoration: none; }
+a:hover { color: var(--accent); text-decoration: underline; text-underline-offset: 4px; }
+a:focus-visible { outline: 3px solid var(--focus); outline-offset: 5px; }
+button:focus-visible { outline-color: var(--focus); }
+.profile { display: flex; align-items: center; gap: 28px; margin-bottom: 52px; }
+.profile img { display: block; border-radius: 50%; background: var(--photo); object-fit: cover; flex-shrink: 0; }
+h1 { font-size: clamp(26px, 5vw, 34px); font-weight: 600; letter-spacing: -1px; margin: 0 0 4px; }
+.handle { color: var(--muted); font-size: 15px; }
+.section-heading { display: flex; justify-content: space-between; align-items: baseline; flex-wrap: wrap; gap: 12px; margin-bottom: 14px; }
+h2 { margin: 0; font-size: 19px; font-weight: 600; }
+.all-repositories { color: var(--accent); font-size: 13px; }
+.repositories { list-style: none; padding: 0; margin: 0; border-top: 1px solid var(--line); }
+.repositories li { border-bottom: 1px solid var(--line); border-color: var(--line); padding: 18px 0; }
+.repositories a { display: flex; align-items: center; justify-content: space-between; gap: 20px; font-size: 16px; overflow-wrap: anywhere; }
+.repository-description { margin: 6px 0 0; color: var(--muted); font-size: 14px; overflow-wrap: anywhere; }
+.repositories span { color: var(--muted); flex-shrink: 0; }
+.skip-link { position: absolute; top: -80px; left: 20px; background: var(--ink); color: var(--paper); padding: 10px 18px; z-index: 3; }
+.skip-link:focus { top: 10px; }
+.theme-toggle {
+  position: absolute; top: 20px; right: max(20px, env(safe-area-inset-right));
+  display: grid; place-items: center; width: 44px; height: 44px;
+  padding: 10px; border: 1px solid var(--line); border-radius: 50%;
+  color: var(--ink); background: var(--button); cursor: pointer;
+}
+.theme-toggle:hover { background: var(--hover); color: var(--accent); }
+.theme-toggle svg {
+  grid-area: 1 / 1; width: 22px; height: 22px; transform-origin: center;
+  transition: opacity var(--icon-fade) ease-in-out, transform var(--icon-fade) ease-in-out,
+    stroke var(--page-fade) ease-in-out;
+}
+.theme-sun { opacity: 0; transform: rotate(-75deg) scale(.62); }
+.theme-moon { opacity: 1; transform: rotate(0) scale(1); }
+[data-theme="dark"] .theme-moon { opacity: 0; transform: rotate(62deg) scale(.62); }
+[data-theme="dark"] .theme-sun { opacity: 1; transform: rotate(0) scale(1); }
+
+/* Animate only the portfolio elements that paint theme colors. */
+:root.theme-fade { transition: background-color var(--page-fade) ease-in-out; }
+.theme-fade :is(body, .profile img, .handle, .all-repositories, .repositories,
+    .repositories li, .repository-description, .repositories span,
+    .theme-toggle, .skip-link, a:hover) {
+  transition: color var(--page-fade) ease-in-out, background-color var(--page-fade) ease-in-out,
+    border-color var(--page-fade) ease-in-out, outline-color var(--page-fade) ease-in-out;
+}
+@media (prefers-reduced-motion: reduce) {
+  /* Button clicks request motion; automatic changes remain immediate. */
+  :root:not(.theme-fade) .theme-toggle svg { transition: none; }
+}
+@media (max-width: 480px) {
+  main { margin: 76px auto 40px; }
+  .profile { gap: 20px; margin-bottom: 36px; }
+  .profile img { width: 88px; height: 88px; }
+  .repositories a { font-size: 15px; }
+  .theme-toggle { top: 14px; right: 14px; }
+}
